@@ -15,7 +15,96 @@
 </main><script>
 const start=document.querySelector('#start'), result=document.querySelector('#result'), fields=document.querySelector('#fields'), review=document.querySelector('#review'), evidence=document.querySelector('#evidence');
 const esc=x=>String(x??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-function show(s){const t=s.triage||{};const data=[['STATUS',s.status],['CLASSIFICATION',t.classification],['SEVERITY',t.severity],['CONFIDENCE',t.confidence],['EVIDENCE',t.evidence],['MITRE ATT&CK',t.mitre_attack_mapping||t.mitre_attack],['RECOMMENDED ACTION',t.recommended_action||t.recommended_actions],['AUTOMATED ACTION',t.automated_action_executed===true?'Executed':'Not executed']];fields.innerHTML=data.map(([k,v])=>`<div class="cell"><span class="label">${k}</span><span class="value">${esc(Array.isArray(v)?v.join(', '):typeof v==='object'?JSON.stringify(v):v)}</span></div>`).join('');result.style.display='block';review.style.display=t.human_review_required?'block':'none';evidence.textContent=JSON.stringify(s.evidence||{},null,2)}
+function formatValue(value) {
+  if (value === null || value === undefined || value === "") {
+    return "—";
+  }
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) {
+      return "—";
+    }
+
+    return value
+      .map(item => formatValue(item))
+      .join("<br>");
+  }
+
+  if (typeof value === "object") {
+    if (value.action) {
+      let html = `<strong>${esc(value.action)}</strong>`;
+
+      if (value.rationale) {
+        html += `<br><span>${esc(value.rationale)}</span>`;
+      }
+
+      if (value.priority !== undefined) {
+        html += `<br><span>Priority: ${esc(value.priority)}</span>`;
+      }
+
+      if (value.requires_human_approval === true) {
+        html += `<br><span>Human approval required</span>`;
+      }
+
+      return html;
+    }
+
+    if (value.finding) {
+      let html = `<strong>${esc(value.finding)}</strong>`;
+
+      if (value.source) {
+        html += `<br><span>Source: ${esc(value.source)}</span>`;
+      }
+
+      if (value.confidence !== undefined) {
+        html += `<br><span>Confidence: ${Number(value.confidence).toFixed(2)}</span>`;
+      }
+
+      return html;
+    }
+
+    return `<pre>${esc(JSON.stringify(value, null, 2))}</pre>`;
+  }
+
+  return esc(String(value));
+}
+
+function show(s) {
+  const t = s.triage || {};
+
+  const data = [
+    ["STATUS", s.status],
+    ["CLASSIFICATION", t.classification],
+    ["SEVERITY", t.severity],
+    ["CONFIDENCE", t.confidence],
+    ["EVIDENCE", t.evidence],
+    ["MITRE ATT&CK", t.mitre_attack_mapping || t.mitre_attack],
+    ["RECOMMENDED ACTION", t.recommended_action || t.recommended_actions],
+    [
+      "AUTOMATED ACTION",
+      t.automated_action_executed === true
+        ? "Executed"
+        : "Not executed"
+    ]
+  ];
+
+  fields.innerHTML = data
+    .map(([k, v]) => `
+      <div class="cell">
+        <span class="label">${esc(k)}</span>
+        <span class="value">${formatValue(v)}</span>
+      </div>
+    `)
+    .join("");
+
+  result.style.display = "block";
+
+  review.style.display =
+    t.human_review_required ? "block" : "none";
+
+  evidence.textContent =
+    JSON.stringify(s.evidence || {}, null, 2);
+}
 async function poll(id){const r=await fetch('/api/demo/'+id),s=await r.json();show(s);if(s.status==='starting'||s.status==='running'){setTimeout(()=>poll(id),1500)}else{start.disabled=false;start.textContent='RUN AGAIN →'}}
 start.onclick=async()=>{start.disabled=true;start.textContent='RUNNING...';result.style.display='none';const r=await fetch('/api/demo/start',{method:'POST'});const s=await r.json();if(!r.ok){alert(s.detail||'Unable to start demo');start.disabled=false;start.textContent='START DEMO →';return}poll(s.session_id)};
 </script></body></html>
