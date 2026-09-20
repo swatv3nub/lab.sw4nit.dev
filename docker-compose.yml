@@ -1,0 +1,23 @@
+services:
+  demo:
+    build: .
+    environment:
+      DEMO_TARGET: ${DEMO_TARGET:?DEMO_TARGET is required}
+      RECONIX_CLOUD_BASE_URL: ${RECONIX_CLOUD_BASE_URL:?RECONIX_CLOUD_BASE_URL is required}
+      RECONIX_CLOUD_API_KEY: ${RECONIX_CLOUD_API_KEY:?RECONIX_CLOUD_API_KEY is required}
+      THREATLENS_BASE_URL: ${THREATLENS_BASE_URL:?THREATLENS_BASE_URL is required}
+      THREATLENS_API_KEY: ${THREATLENS_API_KEY:?THREATLENS_API_KEY is required}
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    mem_limit: 512m
+    cpus: 1.0
+    networks:
+      - reconix-cloud_default
+    ports:
+      - "127.0.0.1:8090:8000"
+
+networks:
+  reconix-cloud_default:
+    external: true
