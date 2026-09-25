@@ -1,0 +1,37 @@
+services:
+  lab:
+    build: .
+    environment:
+      NODE_ENV: production
+      ORION_UPSTREAM: ${ORION_UPSTREAM:-http://orion:8000}
+      ORION_AUTHORIZATION: ${ORION_AUTHORIZATION:-}
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET in your environment}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:8080}
+      GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
+      GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
+      GITHUB_OAUTH_CLIENT_ID: ${GITHUB_OAUTH_CLIENT_ID:-}
+      GITHUB_OAUTH_CLIENT_SECRET: ${GITHUB_OAUTH_CLIENT_SECRET:-}
+      LAB_ANALYST_EMAILS: ${LAB_ANALYST_EMAILS:-}
+      LAB_ADMIN_EMAILS: ${LAB_ADMIN_EMAILS:-}
+    networks:
+      - edge
+      - services
+
+  nginx:
+    image: nginx:1.27-alpine
+    depends_on:
+      - lab
+    ports:
+      - "8080:80"
+    environment:
+      AUTH_UPSTREAM: ${AUTH_UPSTREAM:-http://auth:8080}
+      AUTH_REQUEST_DIRECTIVE: ${AUTH_REQUEST_DIRECTIVE:-}
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    networks:
+      - edge
+
+networks:
+  edge: {}
+  services:
+    internal: true

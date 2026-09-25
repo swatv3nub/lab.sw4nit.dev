@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-25T00:00:00+05:30",
+  "title": "Design System: SW4NIT LAB",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "neutral", "displayName": "Warm Ink", "canonical": "#11110f" },
+      "ground": { "role": "neutral", "displayName": "Research Ground", "canonical": "#0b0b0a" },
+      "panel": { "role": "neutral", "displayName": "Inset Panel", "canonical": "#121210" },
+      "line": { "role": "neutral", "displayName": "Standard Rule", "canonical": "#2b2a26" },
+      "soft-line": { "role": "neutral", "displayName": "Soft Rule", "canonical": "#20201d" },
+      "paper": { "role": "neutral", "displayName": "Warm Paper", "canonical": "#f0ede5" },
+      "muted": { "role": "neutral", "displayName": "Muted Annotation", "canonical": "#aaa59c" },
+      "dim": { "role": "neutral", "displayName": "Dim System Detail", "canonical": "#89837a" },
+      "orange": { "role": "primary", "displayName": "Evidence Orange", "canonical": "#ff5a26" },
+      "orange-soft": { "role": "primary", "displayName": "Soft Evidence Orange", "canonical": "#ff9a75" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Editorial Display", "purpose": "Page-level statements and workspace titles." },
+      "headline": { "displayName": "Section Headline", "purpose": "Section questions and empty-state assertions." },
+      "body": { "displayName": "Reading Copy", "purpose": "Service explanation, policy context, and empty states." },
+      "label": { "displayName": "System Label", "purpose": "Codes, routes, states, metadata, and action labels." }
+    },
+    "shadows": [
+      { "name": "online-status-ring", "value": "0 0 0 4px rgba(255, 90, 38, .12)", "purpose": "Confirms an online ORION service state around the status dot; not used for surface elevation." }
+    ],
+    "motion": [
+      { "name": "button-state", "value": "border-color .2s ease, background .2s ease", "purpose": "Sign-in option hover treatment." },
+      { "name": "reduced-motion", "value": "transition-duration: .01ms !important", "purpose": "Honors the reduced-motion preference for all transitions." }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "760px", "purpose": "Changes the shell and content sequences from multi-column to single-column." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Research Navigation",
+      "kind": "nav",
+      "description": "Centered uppercase route navigation with a thin active evidence underline.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Lab navigation\"><a href=\"#\" class=\"ds-nav-link ds-nav-link-active\">Overview</a><a href=\"#\" class=\"ds-nav-link\">Research flow</a><a href=\"#\" class=\"ds-nav-link\">ORION</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 26px; font: 400 10px/1.8 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; } .ds-nav-link { position: relative; padding: 12px 0; color: #aaa59c; text-decoration: none; } .ds-nav-link:hover, .ds-nav-link-active { color: #f0ede5; } .ds-nav-link-active::after { content: ''; position: absolute; right: 0; bottom: 0; left: 0; height: 1px; background: #ff5a26; } .ds-nav-link:focus-visible { outline: 2px solid #ff9a75; outline-offset: 4px; }"
+    },
+    {
+      "name": "Investigation Text Link",
+      "kind": "button",
+      "refersTo": "text-link",
+      "description": "Uppercase mono action link for entering the investigation workspace.",
+      "html": "<a class=\"ds-text-link\" href=\"#\">Open investigation workspace <span aria-hidden=\"true\">→</span></a>",
+      "css": ".ds-text-link { display: inline-flex; gap: 14px; padding-bottom: 7px; border-bottom: 1px solid #ff5a26; color: #f0ede5; font: 500 11px/1 'DM Mono', monospace; letter-spacing: .06em; text-decoration: none; text-transform: uppercase; } .ds-text-link:hover { color: #ff9a75; } .ds-text-link:focus-visible { outline: 2px solid #ff9a75; outline-offset: 4px; }"
+    },
+    {
+      "name": "Research Pipeline Row",
+      "kind": "custom",
+      "description": "A ruled three-part stage row for the research sequence.",
+      "html": "<div class=\"ds-pipeline-row\"><span class=\"ds-pipeline-index\">01</span><div><h3>Reconix</h3><p>What exists?</p></div><span class=\"ds-pipeline-detail\">Discover attack surface.</span></div>",
+      "css": ".ds-pipeline-row { min-height: 132px; display: grid; grid-template-columns: 72px minmax(220px, .7fr) 1fr; gap: 26px; align-items: center; border-bottom: 1px solid #2b2a26; color: #f0ede5; font-family: 'IBM Plex Sans', sans-serif; } .ds-pipeline-index { color: #ff5a26; font: 400 10px/1 'DM Mono', monospace; letter-spacing: .1em; } .ds-pipeline-row h3 { margin: 0 0 8px; font-size: clamp(1.25rem, 2vw, 1.85rem); font-weight: 500; letter-spacing: -.025em; } .ds-pipeline-row p { margin: 0; color: #ff9a75; font: 400 11px/1.5 'DM Mono', monospace; } .ds-pipeline-detail { max-width: 30ch; justify-self: end; color: #aaa59c; font-size: 14px; }"
+    },
+    {
+      "name": "ORION Service State",
+      "kind": "custom",
+      "description": "A compact real-status marker with a status dot and only an online confirmation ring.",
+      "html": "<p class=\"ds-service-state ds-service-state-online\"><span aria-hidden=\"true\"></span> Online</p>",
+      "css": ".ds-service-state { display: flex; align-items: center; gap: 9px; margin: 0; color: #aaa59c; font: 500 13px/1 'DM Mono', monospace; letter-spacing: .04em; } .ds-service-state span { width: 8px; height: 8px; border-radius: 50%; background: #89837a; } .ds-service-state-online { color: #ff9a75; } .ds-service-state-online span { background: #ff5a26; box-shadow: 0 0 0 4px rgba(255, 90, 38, .12); }"
+    },
+    {
+      "name": "Empty Investigation Record",
+      "kind": "card",
+      "description": "Ruled two-column explanatory state for unavailable investigation records.",
+      "html": "<div class=\"ds-empty-records\" role=\"status\"><p>No live investigation records are displayed until the verified response contract is available.</p><p>No investigation fields or activity are being inferred here.</p></div>",
+      "css": ".ds-empty-records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; padding: 32px 0; border-top: 1px solid #2b2a26; border-bottom: 1px solid #2b2a26; color: #aaa59c; font: 400 16px/1.7 'IBM Plex Sans', sans-serif; } .ds-empty-records p { max-width: 52ch; margin: 0; }"
+    },
+    {
+      "name": "Sign-in Option",
+      "kind": "button",
+      "refersTo": "sign-in-option",
+      "description": "Full-width provider action with a hard-edged rule and restrained hover state.",
+      "html": "<button class=\"ds-sign-in-option\" type=\"button\">Continue with GitHub</button>",
+      "css": ".ds-sign-in-option { width: 100%; border: 1px solid #2b2a26; padding: 15px 18px; background: transparent; color: #f0ede5; cursor: pointer; font: 500 11px/1 'DM Mono', monospace; letter-spacing: .06em; text-align: left; text-transform: uppercase; transition: border-color .2s ease, background .2s ease; } .ds-sign-in-option:hover { border-color: #ff5a26; background: #181410; } .ds-sign-in-option:focus-visible { outline: 2px solid #ff9a75; outline-offset: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Evidence Ledger",
+    "overview": "SW4NIT LAB is a flat, Operate-mode editorial research tool. Its hierarchy comes from warm text, compact technical labels, thin rules, and a deliberate research sequence rather than dashboards or decorative data. Orange is kept scarce for evidence and verified system state, while unavailable data is stated directly.",
+    "keyCharacteristics": [
+      "Near-black research ground with warm paper text.",
+      "IBM Plex Sans statements paired with DM Mono system labels.",
+      "Hard-edged surfaces, thin rules, and calm dense sequences.",
+      "Orange as a functional evidence and state cue."
+    ],
+    "rules": [
+      { "name": "Evidence Scarcity Rule", "body": "Use orange for functional system signals; keep broad surfaces dark and reading-led.", "section": "colors" },
+      { "name": "Label-to-Statement Rule", "body": "Introduce content with a small mono code, then use a sans statement for the human-readable meaning.", "section": "typography" },
+      { "name": "Rule-First Depth Rule", "body": "Separate stages and states with one-pixel rules before adding a surface; only the sign-in frame uses a tonal inset panel.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use labels, rules, and aligned columns to make the workflow legible.",
+      "Do reserve orange for evidence, active, focus, and verified online state.",
+      "Do represent unavailable or pending service data honestly.",
+      "Do preserve visible keyboard focus and the single-column mobile sequence."
+    ],
+    "donts": [
+      "Don't add generic SaaS card grids, decorative charts, fabricated metrics, or simulated investigation records.",
+      "Don't introduce neon, cyberpunk motifs, glass effects, or broad orange glows.",
+      "Don't use rounded containers or pill controls as a substitute for hierarchy."
+    ]
+  }
+}
