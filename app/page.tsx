@@ -2,17 +2,18 @@ import Link from "next/link";
 import { LabShell } from "@/components/lab-shell";
 import { Pipeline } from "@/components/pipeline";
 import { getOrionHealth } from "@/lib/orion";
+import { getServerSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function OverviewPage() {
-  const health = await getOrionHealth();
+  const [health, session] = await Promise.all([getOrionHealth(), getServerSession()]);
   const workspaceNote = health.state === "online"
     ? "Authenticated workspace · live service state confirmed"
     : "Authenticated workspace · service availability shown on entry";
 
   return (
-    <LabShell active="overview">
+    <LabShell active="overview" user={session?.user}>
       <main className="overview">
         <section className="intro" aria-labelledby="overview-title">
           <p className="section-code">LAB / OVERVIEW</p>

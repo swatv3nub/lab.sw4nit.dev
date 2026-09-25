@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { SignInOptions } from "@/components/sign-in-options";
 import { getConfiguredProviders } from "@/lib/auth-config";
+import { getServerSession } from "@/lib/session";
 
 type SignInPageProps = { searchParams: Promise<{ callbackUrl?: string }> };
 
@@ -8,8 +10,12 @@ type SignInPageProps = { searchParams: Promise<{ callbackUrl?: string }> };
 export const dynamic = "force-dynamic";
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
-  const { callbackUrl } = await searchParams;
+  const [{ callbackUrl }, session] = await Promise.all([searchParams, getServerSession()]);
   const safeCallbackUrl = callbackUrl?.startsWith("/") ? callbackUrl : "/orion";
+
+  if (session?.user) {
+    redirect(safeCallbackUrl);
+  }
 
   return (
     <main className="sign-in-page">
